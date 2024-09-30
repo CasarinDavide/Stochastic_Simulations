@@ -10,7 +10,7 @@ This library offers both classical and modern stochastic algorithms, providing u
   -
 
 - **Markov Chain Algorithms**:
-  
+  -
 
 - **Random Search Algorithms**:
   - 
