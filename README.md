@@ -10,8 +10,7 @@ This library offers both classical and modern stochastic algorithms, providing u
   -
 
 - **Markov Chain Algorithms**:
-  - Metropolis-Hastings Algorithm
-  - Gibbs Sampling
+  
 
 - **Random Search Algorithms**:
   - 
