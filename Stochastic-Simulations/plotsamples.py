@@ -1,41 +1,8 @@
-import random as rnd
 import numpy as np
-import matplotlib.pyplot as plt
-
-class ProbilityDistribuition:
-
-    def __init__(self,func:callable,interval: tuple):
-        self.func = func
-        self.interval = interval
-
-    def getRandomX(self):
-        a,b = self.interval
-        return rnd.uniform(a,b)
-
-    def getRandomY(self,x,start_codomain: int = 0 ):
-        return rnd.uniform(start_codomain,self.f(x))
-
-    def getRandomYInInterval(self,start_codomain: tuple ):
-        a,b = start_codomain
-        return rnd.uniform(a,b)
+from matplotlib import pyplot as plt
 
 
-    def f(self,x):
-        return self.func(x)
-def rejectionSampling(g_proxy:ProbilityDistribuition,f:callable) -> tuple:
-
-    while(True):
-
-        x_sampling = g_proxy.getRandomX()
-
-        f_xo = f(x_sampling)
-        g_xo = g_proxy.f(x_sampling)
-
-        y_sampling = g_proxy.getRandomYInInterval((0,g_xo))
-
-        if y_sampling <= f_xo:
-            return (x_sampling,y_sampling)
-def plot_function_and_samples(target_function, g_proxy, x_points, y_points,interval : tuple):
+def plot_function_and_samples(target_function, g_proxy, x_points, y_points, interval: tuple):
     """
     Plots the target function, proxy distribution, and the sampled points from rejection sampling.
 
@@ -45,7 +12,7 @@ def plot_function_and_samples(target_function, g_proxy, x_points, y_points,inter
     y_points: The y points corresponding to the x points.
     """
     # Create a range of x values for plotting the functions
-    start , end = interval
+    start, end = interval
     x_vals = np.linspace(start, end, 1000)
 
     # Calculate the y values for the target function and the proxy distribution
@@ -71,11 +38,3 @@ def plot_function_and_samples(target_function, g_proxy, x_points, y_points,inter
     plt.legend()
     plt.grid(True)
     plt.show()
-
-
-
-
-
-
-
-
