@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 import math as math
 import plotsimulations as plot_simalgo
 import plotsamples as plot_samples
-
+import ode_solver_plot as ode_plot
+import ode_solver
+import diffiusion_simulation_algo as diffucsion_algo
 
 def rejection_sampling():
     x_samples = []
@@ -149,23 +151,53 @@ def lotka_volterra_reaction(init_quantity, max_time):
 
 # ------------- MAIN -------------
 
-michaelis_menten_model_frm([10000,1000,0,0],1000)
-    #def f_y(t, y):
-#return -2 * y * t
-
-    # Parametri del metodo
+#lotka_volterra_reaction([1,1000,0,0],10)
+def f_y(t, y):
+    return np.sin(y)
 
 
-
-#y0 = 1  # Condizione iniziale
-#dt = 0.1  # Passo temporale
-#T = 5  # Tempo totale di simulazione
-#steps = int(T / dt)
+y0 = 1  # Condizione iniziale
+dt = 0.1  # Passo temporale
+T = 5  # Tempo totale di simulazione
+steps = int(T / dt)
 
 # Chiamata al metodo di Eulero
-#x_values, y_values = simalgo.eulero_method(f_y, y0, dt, steps)
+#x_values, y_values = ode_solver.runge_kutta_rk4(f_y,0 ,y0, dt, steps)
+#ode_plot.plot_eulero_method(x_values,y_values)
+
 #plot_simalgo.plot_eulero_method(x_values, y_values)
 #rejection_sampling_gaussian()
 # lotka_volterra_reaction([1,1000,1000],200)
+#rejection_sampling_poisson()
 
-# rejection_sampling_poisson()
+state1 = diffucsion_algo.State(1,0.2)
+state2 = diffucsion_algo.State(2,0.1)
+state3 = diffucsion_algo.State(3,0.01)
+state4 = diffucsion_algo.State(4,0.2)
+
+states = diffucsion_algo.States([state1,state2,state3,state4],[100,20,8,40])
+states2 = diffucsion_algo.States([state1,state2,state3,state4],[41,70,8,50])
+states3 = diffucsion_algo.States([state1,state2,state3,state4],[12,12,1,1])
+states4 = diffucsion_algo.States([state1,state2,state3,state4],[0,0,0,0])
+
+subsystem1 = diffucsion_algo.Subsystem(1,10,states)
+subsystem2 = diffucsion_algo.Subsystem(2,10,states2)
+subsystem3 = diffucsion_algo.Subsystem(3,10,states3)
+subsystem4 = diffucsion_algo.Subsystem(4,10,states4)
+
+subsystem1.add_neighbors([subsystem2,subsystem3])
+subsystem2.add_neighbors([subsystem1,subsystem4])
+subsystem3.add_neighbors([subsystem1,subsystem4])
+subsystem4.add_neighbors([subsystem2,subsystem3])
+
+
+r1 = diffucsion_algo.Reaction(1,[-10,1,1,0],0.2,[state1],lambda x: 10 * x[0])
+r2 = diffucsion_algo.Reaction(2,[10,0,0,-5],0.11,[state4],lambda x:x[3])
+r3 = diffucsion_algo.Reaction(3,[0,-1,1,-1],0.3,[state2,state4],lambda x:x[2] * x[3])
+r4 = diffucsion_algo.Reaction(4,[-3,-4,1,1],0.34,[state1,state2],lambda x: 3 * x[0] * 4 * x[1])
+
+connectivity_matrix = diffucsion_algo.ConnectivityMatrix([subsystem1,subsystem2,subsystem3,subsystem4,subsystem4],[r1,r2,r3,r4])
+
+system = diffucsion_algo.DynamicSystem(connectivity_matrix=connectivity_matrix)
+
+diffucsion_algo.plot_quantities(diffucsion_algo.gillespie_nsm(1,system),system)

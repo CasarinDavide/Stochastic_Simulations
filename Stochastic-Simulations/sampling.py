@@ -98,7 +98,6 @@ def get_random_from_poisson(_lambda: float):
         return rejection_sampling(uniform_dist, lambda x: (_lambda ** x * np.exp(-_lambda)) / math.factorial(int(x)))
     else:
         # approximation with gaussian distribution
-        # TODO
         return get_random_from_gaussian(_lambda,_lambda)
 
 

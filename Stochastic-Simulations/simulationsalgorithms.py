@@ -245,23 +245,3 @@ def euler_maragama(f_y: callable, epsilon: callable, y0, dt, steps):
 
     return x_i, y_i
 
-
-def eulero_method(f_y: callable, y0, dt, steps):
-    # Inizializzazione della lista per memorizzare i risultati
-    y_i = []
-    x_i = []
-    # Condizione iniziale
-    y_i.append(y0)
-    x_i.append(0)
-
-    # Ciclo sul numero di passi temporali
-    for i in range(1, steps):
-        # Calcola il prossimo valore usando il metodo di Eulero
-        t = i * dt  # Tempo attuale
-        y_prev = y_i[-1]  # Ultimo valore di y
-        dy = f_y(t, y_prev) * dt  # Derivata moltiplicata per dt
-        y_new = y_prev + dy  # Aggiorna il valore di y
-        y_i.append(y_new)
-        x_i.append(i)
-
-    return x_i, y_i
